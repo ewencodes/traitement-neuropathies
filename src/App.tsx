@@ -14,7 +14,7 @@ const App = () => {
   }
 
   if (sessionIsStarted) {
-    return <Session duration={25} end={endSession} start={startSession} />
+    return <Session duration={25} end={endSession} />
   }
 
   return (
