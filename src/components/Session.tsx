@@ -9,21 +9,21 @@ const Session: React.FC<{ end: () => void }> = ({ end }) => {
     const [isFinished, setIsFinished] = useState(false)
 
     const stages: StageType[] = [
-        { start: 0, end: 5, type: "change" },
+        { start: 0, end: 5, type: "change", to: "start" },
         { start: 5, end: 305, type: "hot" },
-        { start: 305, end: 310, type: "change" },
+        { start: 305, end: 310, type: "change", to: "cold" },
         { start: 310, end: 370, type: "cold" },
-        { start: 370, end: 375, type: "change" },
+        { start: 370, end: 375, type: "change", to: "hot" },
         { start: 375, end: 615, type: "hot" },
-        { start: 615, end: 620, type: "change" },
+        { start: 615, end: 620, type: "change", to: "cold" },
         { start: 620, end: 680, type: "cold" },
-        { start: 680, end: 685, type: "change" },
+        { start: 680, end: 685, type: "change", to: "hot" },
         { start: 685, end: 925, type: "hot" },
-        { start: 925, end: 930, type: "change" },
+        { start: 925, end: 930, type: "change", to: "cold" },
         { start: 930, end: 990, type: "cold" },
-        { start: 990, end: 995, type: "change" },
+        { start: 990, end: 995, type: "change", to: "hot" },
         { start: 995, end: 1235, type: "hot" },
-        { start: 1235, end: 1240, type: "change" },
+        { start: 1235, end: 1240, type: "change", to: "cold" },
         { start: 1240, end: 1540, type: "cold" },
     ]
 

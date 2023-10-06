@@ -5,6 +5,7 @@ export type StageType = {
     start: number,
     end: number,
     type: "cold" | "hot" | "change"
+    to?: "cold" | "hot" | "start"
 }
 
 const Stages: React.FC<{ stages: StageType[], time: number, start: () => void, stop: () => void }> = ({ stages, time }) => {
@@ -23,7 +24,8 @@ const Stages: React.FC<{ stages: StageType[], time: number, start: () => void, s
             return {
                 minutes: "",
                 seconds: (Math.abs(time - stage?.end)) % 60,
-                type: stage.type
+                type: stage.type,
+                to: stage.to
             };
         } else {
             return {
@@ -50,12 +52,18 @@ const Stages: React.FC<{ stages: StageType[], time: number, start: () => void, s
         <Flex direction="column" justifyContent="center" flex={1}>
             {stage?.type === "change" ? (
                 <Box rounded="2xl" py={4} bg="orange">
-                    <Text fontSize="5xl" textTransform="uppercase" color="white" fontWeight="bold" textAlign="center" >Changement</Text>
+                    <Text fontSize="5xl" textTransform="uppercase" color="white" fontWeight="bold" textAlign="center">{stage.to === "start" ? "Début dans" : "Changement"}</Text>
                     <Flex py={5} alignItems="center" justifyContent="center">
                         <Center bg="white" w="24" h="24" rounded="full">
                             <Text textAlign="center" fontSize="6xl" fontWeight="bold">{stage?.seconds}</Text>
                         </Center>
                     </Flex>
+                    {stage.to && (
+                        <Text fontSize="4xl" color="white" textAlign="center">
+                            {stage.to === "hot" || stage.to === "start" && <>Mettez vos pieds dans le bassin d'<strong>eau chaude</strong>.</>}
+                            {stage.to === "cold" && <>Mettez vos pieds dans le bassin d'<strong>eau froide</strong>.</>}
+                        </Text>
+                    )}
                 </Box>
             ) : (
                 <Box rounded="2xl" bg={stage?.type === "hot" ? "red.100" : "blue.100"} py={4}>
