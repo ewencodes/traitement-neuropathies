@@ -1,4 +1,4 @@
-import { Button, Divider, Flex, Heading, Icon, Text } from '@chakra-ui/react'
+import { Button, Divider, Flex, Heading, Text } from '@chakra-ui/react'
 import { useState } from 'react'
 import { WarningIcon } from '@chakra-ui/icons'
 
@@ -16,7 +16,7 @@ const App = () => {
   }
 
   if (sessionIsStarted) {
-    return <Session duration={25} end={endSession} />
+    return <Session end={endSession} />
   }
 
   return (
