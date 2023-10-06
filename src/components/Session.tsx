@@ -4,7 +4,7 @@ import Timer from './Timer'
 import Stages, { StageType } from './Stages'
 
 const Session: React.FC<{ end: () => void }> = ({ end }) => {
-    const [time, setTime] = useState(1230)
+    const [time, setTime] = useState(0)
     const [isPaused, setIsPaused] = useState(false)
     const [isFinished, setIsFinished] = useState(false)
 
