@@ -3,10 +3,29 @@ import { Button, Flex } from '@chakra-ui/react'
 import Timer from './Timer'
 import Stages, { StageType } from './Stages'
 
-const Session: React.FC<{ duration: number, end: () => void }> = ({ duration, end }) => {
-    const [time, setTime] = useState(0)
+const Session: React.FC<{ end: () => void }> = ({ end }) => {
+    const [time, setTime] = useState(1230)
     const [isPaused, setIsPaused] = useState(false)
-    const [stages, setStages] = useState<StageType[]>([]);
+    const [isFinished, setIsFinished] = useState(false)
+
+    const stages: StageType[] = [
+        { start: 0, end: 5, type: "change" },
+        { start: 5, end: 305, type: "hot" },
+        { start: 305, end: 310, type: "change" },
+        { start: 310, end: 370, type: "cold" },
+        { start: 370, end: 375, type: "change" },
+        { start: 375, end: 615, type: "hot" },
+        { start: 615, end: 620, type: "change" },
+        { start: 620, end: 680, type: "cold" },
+        { start: 680, end: 685, type: "change" },
+        { start: 685, end: 925, type: "hot" },
+        { start: 925, end: 930, type: "change" },
+        { start: 930, end: 990, type: "cold" },
+        { start: 990, end: 995, type: "change" },
+        { start: 995, end: 1235, type: "hot" },
+        { start: 1235, end: 1240, type: "change" },
+        { start: 1240, end: 1540, type: "cold" },
+    ]
 
     useEffect(() => {
         let interval: number | undefined;
@@ -14,14 +33,15 @@ const Session: React.FC<{ duration: number, end: () => void }> = ({ duration, en
         if (!isPaused) {
             interval = setInterval(() => {
                 setTime(time => {
-                    if (time >= duration * 60 * 100) {
+                    if (time >= 25 * 60 + 35) {
                         clearInterval(interval);
+                        setIsFinished(true)
                         return time;
                     }
 
                     return time + 1;
                 })
-            }, 10)
+            }, 1000)
         } else {
             clearInterval(interval)
         }
@@ -29,67 +49,20 @@ const Session: React.FC<{ duration: number, end: () => void }> = ({ duration, en
         return () => clearInterval(interval)
     }, [isPaused])
 
-    useEffect(() => {
-        if (stages.length > 0) return;
-
-        const milliseconds = (duration * 60 * 100) - 60_000;
-
-        setStages(stages => {
-            stages.push({
-                start: 0,
-                end: 30_000,
-                type: "hot"
-            })
-            return stages;
-        })
-
-        const numberOfStages = milliseconds / 30_000
-
-        for (let i = 0; i < numberOfStages; i++) {
-            const firstStageStart = (i + 1) * 30_000
-            const firstStageEnd = firstStageStart + 6_000
-            const lastStageEnd = firstStageEnd + 24_000
-
-            setStages(stages => {
-                stages.push({
-                    start: firstStageStart,
-                    end: firstStageEnd,
-                    type: "cold"
-                })
-                return stages;
-            })
-
-            if (i + 1 === numberOfStages) {
-                setStages(stages => {
-                    stages.push({
-                        start: lastStageEnd,
-                        end: lastStageEnd + 30_000,
-                        type: "hot"
-                    })
-                    return stages;
-                })
-            } else {
-                setStages(stages => {
-                    stages.push({
-                        start: firstStageEnd,
-                        end: lastStageEnd,
-                        type: "hot"
-                    })
-                    return stages;
-                })
-            }
-        }
-        console.log(stages)
-    }, [stages])
-
     return (
         <Flex px={4} direction="column" height="calc(100svh - 16px)">
-            <Timer time={time} />
-            <Stages stages={stages} time={time} />
-            <Flex gap={4}>
-                <Button flex={1} colorScheme='red' onClick={end}>Terminer</Button>
-                {isPaused ? <Button flex={1} colorScheme='green' onClick={() => setIsPaused(false)}>Démarrer</Button> : <Button flex={1} colorScheme='orange' onClick={() => setIsPaused(true)}>Stop</Button>}
-            </Flex>
+            {isFinished ? (
+                <h1>Terminé</h1>
+            ) : (
+                <>
+                    <Timer time={time} />
+                    <Stages stages={stages} time={time} stop={() => setIsPaused(true)} start={() => setIsPaused(false)} />
+                    <Flex gap={4}>
+                        <Button flex={1} colorScheme='red' onClick={end}>Terminer</Button>
+                        {isPaused ? <Button flex={1} colorScheme='green' onClick={() => setIsPaused(false)}>Démarrer</Button> : <Button flex={1} colorScheme='orange' onClick={() => setIsPaused(true)}>Stop</Button>}
+                    </Flex>
+                </>
+            )}
         </Flex>
     )
 }

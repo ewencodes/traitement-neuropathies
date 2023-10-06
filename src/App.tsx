@@ -1,5 +1,7 @@
-import { Button, Divider, Flex, Heading, Text } from '@chakra-ui/react'
+import { Button, Divider, Flex, Heading, Icon, Text } from '@chakra-ui/react'
 import { useState } from 'react'
+import { WarningIcon } from '@chakra-ui/icons'
+
 import Session from './components/Session';
 
 const App = () => {
@@ -28,9 +30,11 @@ const App = () => {
         <Flex direction="column">
           <Text fontWeight="bold">Instructions</Text>
           <Text>Température de l'eau chaude : <strong>38° à 43°</strong></Text>
-          <Text>Température de l'eau froid : <strong>14° à 18°</strong></Text>
+          <Text>Température de l'eau froide : <strong>14° à 18°</strong></Text>
           <Text>Ne pas appliquer de glaçons.</Text>
         </Flex>
+        <Divider />
+        <Text backgroundColor="red" color="white" px={4} py={2} borderRadius="md" display="flex" alignItems="center" gap={4}><WarningIcon /> Pensez à désactiver la mise en veille automatique de votre téléphone dans les réglages.</Text>
         <Divider />
         <Text>Durée : <strong>25 minutes</strong></Text>
         <Button colorScheme="blue" onClick={startSession}>Commencer</Button>

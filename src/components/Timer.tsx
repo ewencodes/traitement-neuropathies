@@ -6,7 +6,7 @@ const Timer: React.FC<{ time: number }> = ({ time }) => {
         <Box>
             <Text textAlign="center">Temps total</Text>
             <Text fontSize="4xl" textAlign="center">
-                {("0" + Math.floor((time / 6000) % 60)).slice(-2)}:{("0" + Math.floor((time / 100) % 60)).slice(-2)}
+                {("0" + Math.floor((time / 60) % 60)).slice(-2)}:{("0" + Math.floor((time) % 60)).slice(-2)}
             </Text>
         </Box>
     );
