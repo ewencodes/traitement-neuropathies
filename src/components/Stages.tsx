@@ -8,6 +8,15 @@ export type StageType = {
     to?: "cold" | "hot" | "start"
 }
 
+function setAsyncTimeout<T>(fn: () => Promise<T>, timeout = 0) {
+    return new Promise<T>(resolve => {
+        setTimeout(() => {
+            const t = fn();
+            resolve(t);
+        }, timeout);
+    });
+}
+
 const Stages: React.FC<{ stages: StageType[], time: number, start: () => void, stop: () => void }> = ({ stages, time }) => {
     const stage = useMemo(() => {
         const stage = stages.find(stage => stage.start <= time && stage.end > time);
@@ -37,16 +46,30 @@ const Stages: React.FC<{ stages: StageType[], time: number, start: () => void, s
     }, [time])
 
     useEffect(() => {
-        if (stage.type === "change") {
-            new Audio('beep.mp3').play()
+        const playAudio = async () => {
+            if (stage.type === "change") {
+                const audio = new Audio('beep.mp3')
 
-            if (`${stage.seconds}` === "1") {
-                setTimeout(() => {
-                    new Audio("beep_start.mp3").play()
-                }, 1000)
+                await audio.play()
+                audio.currentTime = 0
+
+                if (`${stage.seconds}` === "1") {
+                    setAsyncTimeout<void>(async () => {
+                        const audio1 = new Audio("beep_start.mp3")
+
+                        await audio1.play()
+                        audio1.currentTime = 0
+                    }, 1000)
+                }
             }
         }
+
+        playAudio()
     }, [stage, time])
+
+    useEffect(() => {
+        console.log(stage.to)
+    }, [stage])
 
     return (
         <Flex direction="column" justifyContent="center" flex={1}>
@@ -60,7 +83,7 @@ const Stages: React.FC<{ stages: StageType[], time: number, start: () => void, s
                     </Flex>
                     {stage.to && (
                         <Text fontSize="4xl" color="white" textAlign="center">
-                            {stage.to === "hot" || stage.to === "start" && <>Mettez vos pieds dans le bassin d'<strong>eau chaude</strong>.</>}
+                            {(stage.to === "hot" || stage.to === "start") && <>Mettez vos pieds dans le bassin d'<strong>eau chaude</strong>.</>}
                             {stage.to === "cold" && <>Mettez vos pieds dans le bassin d'<strong>eau froide</strong>.</>}
                         </Text>
                     )}
