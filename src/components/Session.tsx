@@ -41,7 +41,7 @@ const Session: React.FC<{ end: () => void }> = ({ end }) => {
 
                     return time + 1;
                 })
-            }, 100)
+            }, 1000)
         } else {
             clearInterval(interval)
         }
